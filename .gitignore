@@ -1,52 +1,24 @@
-# Prerequisites
-*.d
+*.nupkg
+*.suo
+*.user
+*.DotSettings
+bin/
+obj/
+packages/
+_ReSharper.*/
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+.cbs/
+cbs.log
+logs/
 
-# Linker output
-*.ilk
-*.map
-*.exp
+*project.lock.json
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+.DS_Store
+*~
+*.userprefs
+TestResult.xml
+build-packages
+.fake
+.vs
+.idea
+.vscode
