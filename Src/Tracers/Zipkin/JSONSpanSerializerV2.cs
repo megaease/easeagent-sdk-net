@@ -2,9 +2,6 @@
 using System.IO;
 using System.Net;
 using System;
-using System.Text;
-using zipkin4net;
-using zipkin4net.Utils;
 using easeagent.Tracers.Zipkin.V2;
 
 namespace easeagent.Tracers.Zipkin
@@ -34,7 +31,15 @@ namespace easeagent.Tracers.Zipkin
         private const string service = "service";
         private const string tracingType = "type";
 
+        public string ServiceName { get; }
+        public string TracingType { get; }
 
+
+        public JSONSpanSerializerV2(string ServiceName, string TracingType)
+        {
+            this.ServiceName = ServiceName;
+            this.TracingType = TracingType;
+        }
 
         public void SerializeTo(Stream stream, zipkin4net.Tracers.Zipkin.Span span)
         {
@@ -124,9 +129,9 @@ namespace easeagent.Tracers.Zipkin
             }
 
             writer.Write(comma);
-            writer.WriteField(service, span.LocalServiceName);
+            writer.WriteField(service, this.ServiceName);
             writer.Write(comma);
-            writer.WriteField(tracingType, "log-tracing");
+            writer.WriteField(tracingType, this.TracingType);
             writer.Write(closingBrace);
         }
 
