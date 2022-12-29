@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using easeagent.Log;
 using YamlDotNet.Serialization.NamingConventions;
 
 namespace easeagent
@@ -43,7 +44,7 @@ namespace easeagent
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .Build();
             IDictionary<string, string> dict = deserializer.Deserialize<IDictionary<string, string>>(File.ReadAllText(yamlFile));
-            Console.WriteLine("load spec from yaml: " + yamlFile);
+            LoggerManager.GetTracingLogger().LogInformation("load spec from yaml: " + yamlFile);
             Spec spec = NewOne();
             foreach (KeyValuePair<string, string> kvp in dict)
             {
@@ -88,7 +89,16 @@ namespace easeagent
 
         public static bool isEmpty(string v)
         {
-            return v == null || v.Length == 0;
+            return v == null || v.Length == 0 || v.Trim().Length == 0;
         }
+
+        public void Validate()
+        {
+            if (EnableTls && (isEmpty(TlsKey) || isEmpty(TlsCert)))
+            {
+                throw new FormatException("key, cert are not all specified");
+            }
+        }
+
     }
 }
