@@ -49,7 +49,7 @@ namespace easeagent
             TraceManager.Start(LoggerManager.GetTracingLogger());
         }
 
-        public static string getServiceName()
+        public static string GetServiceName()
         {
             return spec.ServiceName;
         }
