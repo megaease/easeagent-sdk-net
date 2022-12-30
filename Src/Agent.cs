@@ -31,7 +31,16 @@ namespace easeagent
             }
             else
             {
-                sender = HttpSender.Build(spec);
+                try
+                {
+                    sender = HttpSender.Build(spec);
+                }
+                catch (Exception e)
+                {
+                    LoggerManager.GetTracingLogger().LogError("build http sender fail, use console reporter for trace: " + e.ToString());
+                    sender = new ConsoleSender();
+
+                }
             }
             var serializer = new JSONSpanSerializerV2(spec.ServiceName, spec.TracingType);
             var tracer = new ZipkinTracer(sender, serializer);

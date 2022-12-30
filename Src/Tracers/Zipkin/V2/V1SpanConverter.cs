@@ -431,7 +431,6 @@ namespace easeagent.Tracers.Zipkin.V2
         {
             var hexTraceIdHigh = TraceManager.Trace128Bits ? NumberUtils.EncodeLongToLowerHexString(source.SpanState.TraceIdHigh) : "";
             var traceId = hexTraceIdHigh + NumberUtils.EncodeLongToLowerHexString(source.SpanState.TraceId);
-            Console.WriteLine(traceId);
             builder.TraceId(hexTraceIdHigh + NumberUtils.EncodeLongToLowerHexString(source.SpanState.TraceId));
             if (!source.IsRoot)
             {

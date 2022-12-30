@@ -1,8 +1,11 @@
+using System;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using easeagent.Log;
 using zipkin4net.Tracers.Zipkin;
 
 namespace easeagent.Transport.Http
@@ -60,11 +63,28 @@ namespace easeagent.Transport.Http
         public void Send(byte[] data)
         {
             var content = new ByteArrayContent(data);
-            System.Console.WriteLine(_contentType);
             content.Headers.Add("Content-Type", _contentType);
             content.Headers.Add("Content-Length", data.Length.ToString());
             content.Headers.Add("b3", "0");
             Task<HttpResponseMessage> task = _httpClient.PostAsync(_collectorUrl, content);
+            task.ContinueWith((task, o) =>
+            {
+                TaskAwaiter<HttpResponseMessage> a = task.GetAwaiter();
+                try
+                {
+                    HttpResponseMessage result = a.GetResult();
+                    LoggerManager.GetTracingLogger().LogInformation(result.ToString());
+                    if (!result.IsSuccessStatusCode)
+                    {
+                        LoggerManager.GetTracingLogger().LogWarning("send data to collector fail: " + result.ToString());
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    LoggerManager.GetTracingLogger().LogError($"send data to {_collectorUrl} faild: {e.ToString()}");
+                }
+            }, null);
         }
     }
 }

@@ -40,12 +40,28 @@ namespace easeagent
 
         public static Spec Load(string yamlFile)
         {
-            var deserializer = new YamlDotNet.Serialization.DeserializerBuilder()
-            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-            .Build();
-            IDictionary<string, string> dict = deserializer.Deserialize<IDictionary<string, string>>(File.ReadAllText(yamlFile));
-            LoggerManager.GetTracingLogger().LogInformation("load spec from yaml: " + yamlFile);
             Spec spec = NewOne();
+            if (yamlFile == null)
+            {
+                LoggerManager.GetTracingLogger().LogInformation("yamlFile was ''");
+                return spec;
+            }
+            IDictionary<string, string> dict = default(IDictionary<string, string>);
+            try
+            {
+                var deserializer = new YamlDotNet.Serialization.DeserializerBuilder()
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .Build();
+                dict = deserializer.Deserialize<IDictionary<string, string>>(File.ReadAllText(yamlFile));
+                LoggerManager.GetTracingLogger().LogInformation("load spec from yaml: " + yamlFile);
+            }
+            catch (Exception e)
+            {
+                LoggerManager.GetTracingLogger().LogError("read yaml file:" + yamlFile + " fail, use default logger span json for:" + e.ToString());
+                return spec;
+            }
+
+
             foreach (KeyValuePair<string, string> kvp in dict)
             {
                 switch (kvp.Key)
