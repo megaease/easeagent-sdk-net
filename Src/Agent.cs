@@ -9,10 +9,11 @@ namespace easeagent
 {
     public class Agent
     {
+        private static Spec spec = Spec.NewOne();
         //Environment.GetEnvironmentVariable("EASEAGENT_CONFIG")
         public static void RegisterFromYaml(String yamlFile)
         {
-            Spec spec = Spec.Load(yamlFile);
+            spec = Spec.Load(yamlFile);
             spec.Validate();
             if (spec.TracingEnable)
             {
@@ -46,6 +47,11 @@ namespace easeagent
             var tracer = new ZipkinTracer(sender, serializer);
             TraceManager.RegisterTracer(tracer);
             TraceManager.Start(LoggerManager.GetTracingLogger());
+        }
+
+        public static string getServiceName()
+        {
+            return spec.ServiceName;
         }
 
         public static void Stop()

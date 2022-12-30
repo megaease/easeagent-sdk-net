@@ -73,7 +73,6 @@ namespace easeagent.Transport.Http
                 try
                 {
                     HttpResponseMessage result = a.GetResult();
-                    LoggerManager.GetTracingLogger().LogInformation(result.ToString());
                     if (!result.IsSuccessStatusCode)
                     {
                         LoggerManager.GetTracingLogger().LogWarning("send data to collector fail: " + result.ToString());
