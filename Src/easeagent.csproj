@@ -19,13 +19,15 @@
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <PackageTags>Easeagent;Zipkin;Tracer;Tracing;Criteo;zipkin4net</PackageTags>
-    <!-- <PackageProjectUrl>https://github.com/megaease/easeagent-sdk-net</PackageProjectUrl> -->
-    <!-- <PackageLicenseUrl>https://github.com/openzipkin/zipkin4net/blob/master/LICENSE</PackageLicenseUrl> -->
+    <PackageProjectUrl>https://github.com/megaease/easeagent-sdk-net</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/megaease/easeagent-sdk-net/blob/main/LICENSE</PackageProjectUrl>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4' OR '$(TargetFramework)' == 'netstandard1.6'">
+  <PropertyGroup
+    Condition="'$(TargetFramework)' == 'netstandard1.4' OR '$(TargetFramework)' == 'netstandard1.6'">
     <DefineConstants>$(DefineConstants);NET_CORE</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.4' OR '$(TargetFramework)' == 'netstandard1.6'">
+  <ItemGroup
+    Condition="'$(TargetFramework)' == 'netstandard1.4' OR '$(TargetFramework)' == 'netstandard1.6'">
     <PackageReference Include="System.Threading" Version="4.3.0" />
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
     <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
@@ -41,6 +43,7 @@
     <PackageReference Include="zipkin4net" Version="1.5.0" />
     <PackageReference Include="zipkin4net.middleware.aspnetcore" Version="1.5.0" />
   </ItemGroup>
+
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
