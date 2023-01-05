@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+# set -e
 
 pushd `dirname $0` > /dev/null
 SCRIPT_PATH=`pwd -P`
@@ -10,3 +10,4 @@ cd $SCRIPT_PATH/
 dotnet pack Src
 mkdir source
 cp Src/bin/Debug/*.nupkg source
+cp paket-files/github.com/megaease/zipkin4net/source/* source

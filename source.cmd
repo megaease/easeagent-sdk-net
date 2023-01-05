@@ -12,3 +12,4 @@ dotnet pack Src
 
 MD source
 COPY Src/bin/Debug/*.nupkg source
+COPY paket-files/github.com/megaease/zipkin4net/source/* source
