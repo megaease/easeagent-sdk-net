@@ -22,5 +22,5 @@ nuget YamlDotNet 12.3.1
 git https://github.com/megaease/zipkin4net.git 1.5.0-megaease build: "source.cmd", Packages: /source/, OS: windows
 git https://github.com/megaease/zipkin4net.git 1.5.0-megaease build: "source.sh", Packages: /source/, OS: mono
 
-nuget zipkin4net 1.5.0-megaease
-nuget zipkin4net.middleware.aspnetcore 1.5.0-megaease
+nuget zipkin4net == 1.5.0-megaease
+nuget zipkin4net.middleware.aspnetcore == 1.5.0-megaease
