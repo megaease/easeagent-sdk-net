@@ -1426,12 +1426,6 @@ NUGET
       System.Threading (>= 4.3) - restriction: && (< monoandroid) (< monotouch) (< net46) (>= netstandard1.3) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
       System.Xml.ReaderWriter (>= 4.3) - restriction: && (< monoandroid) (< monotouch) (< net46) (>= netstandard1.3) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
     YamlDotNet (12.3.1)
-    zipkin4net.middleware.aspnetcore (1.5)
-      Microsoft.AspNetCore.Hosting (>= 1.1.1) - restriction: || (>= net461) (>= netstandard1.6)
-      Microsoft.Extensions.Logging (>= 1.1.1) - restriction: || (>= net461) (>= netstandard1.6)
-      NETStandard.Library (>= 1.6.1) - restriction: && (< net461) (>= netstandard1.6)
-      System.Net.Http (>= 4.3) - restriction: || (>= net461) (>= netstandard1.6)
-      zipkin4net (>= 1.5) - restriction: || (>= net461) (>= netstandard1.6)
   remote: paket-files/github.com/megaease/zipkin4net/source
     zipkin4net (1.5.0-megaease)
       Apache.Thrift (>= 1.0.2) - restriction: || (>= net451) (>= netstandard1.4)
@@ -1444,6 +1438,12 @@ NUGET
       System.Threading (>= 4.3) - restriction: || (&& (< net451) (>= netstandard1.4) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6))
       System.Threading.Tasks.Dataflow (>= 4.7) - restriction: || (>= net451) (>= netstandard1.4)
       System.Threading.Thread (>= 4.3) - restriction: || (&& (< net451) (>= netstandard1.4) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6))
+    zipkin4net.middleware.aspnetcore (1.5.0-megaease)
+      Microsoft.AspNetCore.Hosting (>= 1.1.1) - restriction: || (>= net461) (>= netstandard1.6)
+      Microsoft.Extensions.Logging (>= 1.1.1) - restriction: || (>= net461) (>= netstandard1.6)
+      NETStandard.Library (>= 1.6.1) - restriction: && (< net461) (>= netstandard1.6)
+      System.Net.Http (>= 4.3) - restriction: || (>= net461) (>= netstandard1.6)
+      zipkin4net (>= 1.5.0-megaease) - restriction: || (>= net461) (>= netstandard1.6)
 GIT
   remote: https://github.com/megaease/zipkin4net.git
      (c321828318f2e561e973ccbfaa289ab52233c2ff)
