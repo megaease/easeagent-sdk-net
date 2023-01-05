@@ -1,0 +1,5 @@
+Microsoft.NET.Test.Sdk
+Moq
+NUnit
+NUnit3TestAdapter
+Microsoft.AspNetCore.App

@@ -1,0 +1,4 @@
+Microsoft.AspNetCore
+Microsoft.Extensions.Http
+System.Net.Http
+Microsoft.Extensions.Configuration

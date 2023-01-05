@@ -1,0 +1,12 @@
+System.Threading
+System.Threading.Thread
+System.Collections.Specialized
+System.Net.NameResolution
+System.Net.NetworkInformation
+System.Runtime.Serialization.Formatters
+Apache.Thrift
+System.Threading.Tasks.Dataflow
+System.Net.Http
+YamlDotNet
+zipkin4net
+zipkin4net.middleware.aspnetcore
