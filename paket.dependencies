@@ -19,8 +19,10 @@ nuget System.Threading.Tasks.Dataflow 4.7.0
 nuget System.Threading.Thread 4.3.0
 nuget YamlDotNet 12.3.1
 
-git https://github.com/megaease/zipkin4net.git 1.5.0-megaease build: "source.cmd", Packages: /source/, OS: windows
-git https://github.com/megaease/zipkin4net.git 1.5.0-megaease build: "source.sh", Packages: /source/, OS: mono
 
+http https://github.com/megaease/zipkin4net/releases/download/1.5.0-megaease/zipkin4net.1.5.0-megaease.nupkg megaease/zipkin4net.1.5.0-megaease.nupkg
+http https://github.com/megaease/zipkin4net/releases/download/1.5.0-megaease/zipkin4net.middleware.aspnetcore.1.5.0-megaease.nupkg  megaease/zipkin4net.middleware.aspnetcore.1.5.0-megaease.nupkg
+
+source paket-files/github.com/megaease
 nuget zipkin4net == 1.5.0-megaease
 nuget zipkin4net.middleware.aspnetcore == 1.5.0-megaease
