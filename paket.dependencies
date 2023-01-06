@@ -20,9 +20,9 @@ nuget System.Threading.Thread 4.3.0
 nuget YamlDotNet 12.3.1
 
 
-http https://github.com/megaease/zipkin4net/releases/download/1.5.0-megaease/zipkin4net.1.5.0-megaease.nupkg megaease/zipkin4net.1.5.0-megaease.nupkg
-http https://github.com/megaease/zipkin4net/releases/download/1.5.0-megaease/zipkin4net.middleware.aspnetcore.1.5.0-megaease.nupkg  megaease/zipkin4net.middleware.aspnetcore.1.5.0-megaease.nupkg
+http https://github.com/megaease/zipkin4net/releases/download/1.5.0-megaease/megaease.zipkin4net.1.5.0.nupkg megaease/megaease.zipkin4net.1.5.0.nupkg
+http https://github.com/megaease/zipkin4net/releases/download/1.5.0-megaease/megaease.zipkin4net.middleware.aspnetcore.1.5.0.nupkg  megaease/megaease.zipkin4net.middleware.aspnetcore.1.5.0.nupkg
 
 source paket-files/github.com/megaease
-nuget zipkin4net == 1.5.0-megaease
-nuget zipkin4net.middleware.aspnetcore == 1.5.0-megaease
+nuget megaease.zipkin4net 1.5.0
+nuget megaease.zipkin4net.middleware.aspnetcore 1.5.0

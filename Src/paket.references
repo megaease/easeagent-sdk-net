@@ -8,5 +8,5 @@ Apache.Thrift
 System.Threading.Tasks.Dataflow
 System.Net.Http
 YamlDotNet
-zipkin4net
-zipkin4net.middleware.aspnetcore
+megaease.zipkin4net
+megaease.zipkin4net.middleware.aspnetcore
