@@ -86,7 +86,7 @@ namespace easeagent.Tracers.Zipkin
             //local endpoint
             if (span.LocalEndpoint != null)
             {
-                SerializeLocalEndPoint(writer, span.LocalEndpoint.HostPort, span.LocalEndpoint.ServiceName);
+                SerializeLocalEndPoint(writer, span.LocalEndpoint.HostPort, this.ServiceName);
             }
 
             //debug
