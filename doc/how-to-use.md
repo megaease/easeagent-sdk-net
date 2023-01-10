@@ -2,7 +2,7 @@
 
 First ***production ready***, simple and full Easeagent SDK implementation without dependencies.
 
-## Installing via Composer
+## Installing via dotnet
 
 easeagent-sdk-net can be installed package:
 ```bash

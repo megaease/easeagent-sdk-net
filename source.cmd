@@ -9,8 +9,7 @@ dotnet restore Tests
 dotnet restore Examples/aspnetcore/common
 dotnet restore Examples/aspnetcore/backend
 dotnet restore Examples/aspnetcore/frontend
-dotnet pack Src
+dotnet pack Src  --configuration Release
 
 MD source
-COPY Src/bin/Debug/*.nupkg source
-COPY paket-files/github.com/megaease/zipkin4net/source/* source
+COPY Src/bin/Release/*.nupkg source

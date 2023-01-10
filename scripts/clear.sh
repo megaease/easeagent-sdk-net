@@ -6,4 +6,6 @@ cd $SCRIPT_PATH/../
 
 dotnet nuget locals all --clear
 dotnet tool restore
-dotnet paket restore
+rm -rf source
+rm -rf packages
+rm -rf paket-files
