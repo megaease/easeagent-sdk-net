@@ -108,9 +108,10 @@ namespace easeagent.Tracers.Zipkin
             writer.Write(comma);
             writer.WriteField(kind, span.Kind.ToString());
 
-            if (span.RemoteEndpoint != null)
+            var remoteEndpoint = getRemoteEndpoint(span);
+            if (remoteEndpoint != null)
             {
-                SerializeLocalEndPoint(writer, span.RemoteEndpoint.HostPort, span.RemoteEndpoint.ServiceName);
+                SerializeRemoteEndPoint(writer, remoteEndpoint.HostPort, remoteEndpoint.ServiceName);
             }
 
             if (span.Annotations != null && span.Annotations.Count != 0)
@@ -186,6 +187,26 @@ namespace easeagent.Tracers.Zipkin
         private static String getServiceNameOrDefault(Span span)
         {
             return span.LocalServiceName != null ? span.LocalServiceName : zipkin4net.Tracers.Zipkin.SerializerUtils.DefaultServiceName;
+        }
+
+        private Endpoint getRemoteEndpoint(Span span)
+        {
+            var tags = span.Tags;
+            if (tags == null || !tags.ContainsKey(easeagent.Middleware.TypeExtensions.TAG))
+            {
+                return span.RemoteEndpoint;
+            }
+            var middlewareType = tags[easeagent.Middleware.TypeExtensions.TAG];
+            var endpoint = span.RemoteEndpoint;
+            if (endpoint == null)
+            {
+                return new Endpoint(middlewareType, null);
+            }
+            if (string.IsNullOrEmpty(endpoint.ServiceName))
+            {
+                return new Endpoint(middlewareType, endpoint.HostPort);
+            }
+            return endpoint;
         }
     }
 

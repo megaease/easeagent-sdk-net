@@ -13,7 +13,7 @@ namespace frontend
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient("Tracer").AddHttpMessageHandler(provider =>
-                TracingHandler.WithoutInnerHandler(provider.GetService<IConfiguration>()[easeagent.Agent.GetServiceName()]));
+                TracingHandler.WithoutInnerHandler(easeagent.Agent.GetServiceName()));
         }
 
         protected override void Run(IApplicationBuilder app, IConfiguration config)

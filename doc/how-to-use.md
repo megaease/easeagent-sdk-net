@@ -6,7 +6,7 @@ First ***production ready***, simple and full Easeagent SDK implementation witho
 
 easeagent-sdk-net can be installed package:
 ```bash
-$ dotnet add package zipkin4net --version 0.0.1
+$ dotnet add package easeagent --version 0.0.1
 ```
 
 ## Usage
@@ -28,6 +28,31 @@ easeagent.Agent.Stop();
 
 Your zipkin client is now ready!
 
+
+### Third: use HTTP Server Transaction and Client Handler for span
+
+##### 1. Server Transaction
+
+```csharp
+using zipkin4net.Middleware;
+app.UseTracing(easeagent.Agent.GetServiceName());
+```
+
+##### 2. Client 
+```csharp
+// init client before
+services.AddHttpClient("Tracer").AddHttpMessageHandler(provider =>
+    TracingHandler.WithoutInnerHandler(easeagent.Agent.GetServiceName()));
+
+// use httpclient after.
+var callServiceUrl = config["callServiceUrl"];
+var clientFactory = app.ApplicationServices.GetService<IHttpClientFactory>();
+using (var httpClient = clientFactory.CreateClient("Tracer"))
+{
+    var response = await httpClient.GetAsync(callServiceUrl);
+}
+```
+
 ### Play with traces
 
 To create a new trace, simply call
@@ -44,23 +69,4 @@ trace.Record(Annotations.ServiceName(serviceName));
 trace.Record(Annotations.Rpc("GET"));
 trace.Record(Annotations.ServerSend());
 trace.Record(Annotations.Tag("http.url", "<url>")); //adds binary annotation
-```
-
-### Use for package
-
-Zipkin provides some official packages, you can also use them easily, such as:
-```csharp
-// init client before
-services.AddHttpClient("Tracer").AddHttpMessageHandler(provider =>
-    TracingHandler.WithoutInnerHandler(provider.GetService<IConfiguration>()["applicationName"]));
-
-
-// use httpclient after.
-var callServiceUrl = config["callServiceUrl"];
-var clientFactory = app.ApplicationServices.GetService<IHttpClientFactory>();
-using (var httpClient = clientFactory.CreateClient("Tracer"))
-{
-    var response = await httpClient.GetAsync(callServiceUrl);
-}
-
 ```
