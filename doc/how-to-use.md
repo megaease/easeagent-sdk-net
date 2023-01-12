@@ -40,6 +40,8 @@ app.UseTracing(easeagent.Agent.GetServiceName());
 
 ##### 2. Client 
 ```csharp
+using zipkin4net.Transport.Http;
+
 // init client before
 services.AddHttpClient("Tracer").AddHttpMessageHandler(provider =>
     TracingHandler.WithoutInnerHandler(easeagent.Agent.GetServiceName()));

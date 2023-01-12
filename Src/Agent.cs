@@ -1,3 +1,19 @@
+/**
+ * Copyright 2023 MegaEase
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 using System;
 using System.Collections.Generic;
 using easeagent.Log;
@@ -11,6 +27,8 @@ using easeagent.Middleware;
 namespace easeagent
 {
     public delegate string HeaderGetter(string key);
+    public delegate void CallBack();
+
     public class Agent
     {
         private static Spec spec = Spec.NewOne();
@@ -91,6 +109,20 @@ namespace easeagent
         public static void RecordMiddleware(Trace trace, easeagent.Middleware.Type type)
         {
             trace.Record(Annotations.Tag(easeagent.Middleware.TypeExtensions.TAG, type.value()));
+        }
+
+        public static void Current(Trace trace, CallBack callBack)
+        {
+            Trace old = Trace.Current;
+            Trace.Current = trace;
+            try
+            {
+                callBack();
+            }
+            finally
+            {
+                Trace.Current = old;
+            }
         }
     }
 }
