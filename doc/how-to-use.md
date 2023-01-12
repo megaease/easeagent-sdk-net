@@ -70,3 +70,10 @@ trace.Record(Annotations.Rpc("GET"));
 trace.Record(Annotations.ServerSend());
 trace.Record(Annotations.Tag("http.url", "<url>")); //adds binary annotation
 ```
+
+We provide an interface so that you can decorate the Span of the middleware, please refer to another [document](./megaease-cloud-config.md) for the reason of decoration.
+```csharp
+// decorate a span to rabbitmq
+Agent.RecordMiddleware(trace, easeagent.Middleware.Type.RabbitMQ);
+```
+
