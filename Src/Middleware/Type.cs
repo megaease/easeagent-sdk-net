@@ -30,9 +30,9 @@ namespace easeagent.Middleware
     public static class TypeExtensions
     {
         public const string TAG = "component.type";
-        public static string value(this Type type)
+        public static string Value(this Type type)
         {
-            string result = "";
+            string result = "unknow";
             switch (type)
             {
                 case Type.MySql:

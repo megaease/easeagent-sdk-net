@@ -108,7 +108,7 @@ namespace easeagent
 
         public static void RecordMiddleware(Trace trace, easeagent.Middleware.Type type)
         {
-            trace.Record(Annotations.Tag(easeagent.Middleware.TypeExtensions.TAG, type.value()));
+            trace.Record(Annotations.Tag(easeagent.Middleware.TypeExtensions.TAG, type.Value()));
         }
 
         public static void Current(Trace trace, CallBack callBack)

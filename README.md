@@ -69,12 +69,12 @@ app.UseTracing(easeagent.Agent.GetServiceName());
 ## Documentation
 [About Config](./doc/about-config.md)
 ## Example
-Obs. for a more complete [frontend](./Examples/aspnetcore/frontend/)/[backend](./Examples/aspnetcore/backend/) example.
+Obs. for a more complete [frontend/backend](./Examples/aspnetcore/) example.
 
 ## About MegaEase Cloud 
 1. [Use SDK in MegaEase Cloud](./doc/how-to-use.md)
 2. Get MegaEase Cloud Config. [About MegaEase Cloud Config](./doc/megaease-cloud-config.md)
-3. [Decorate the Span](./doc/middleware-span.md). please use api: `Agent.startMiddlewareSpan` for decorate Span.
+3. [Decorate the Span](./doc/middleware-span.md). please use api: `Agent.RecordMiddleware` for decorate Span.
 
 ## Community
 
