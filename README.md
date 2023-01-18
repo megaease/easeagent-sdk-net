@@ -17,7 +17,7 @@
 A lightweight & opening .NET SDK for Cloud-Native and APM system
 ## Overview
 
-- EaseAgent SDK can collect distributed application tracing, which could be used in the APM system and improve the observability of a distributed system. for the tracing, EaseAgent SDK follows the [Google Dapper](https://research.google/pubs/pub36356/) paper. 
+- EaseAgent SDK can collect distributed application tracing, which could be used in the APM system and improve the observability of a distributed system. for the tracing, EaseAgent SDK follows the [Google Dapper](https://research.google/pubs/pub36356/) paper and use [zipkin4net](https://github.com/openzipkin/zipkin4net) core library. 
 - EaseAgent SDK also can work with Cloud-Native architecture.
 - EaseAgent SDK also can work with [MegaEase Cloud](https://cloud.megaease.com/). For example, it can monitor for service by .NET Docker APP.
 
