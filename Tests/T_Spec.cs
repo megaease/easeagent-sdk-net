@@ -50,7 +50,7 @@ namespace easeagent.UTest
         {
             string path = getBasePath("agent_test_normal.yml");
             Spec spec = Spec.Load(path);
-            Assert.AreEqual("demo.demo.sdk-php-router-service", spec.ServiceName);
+            Assert.AreEqual("demo.demo.sdk-net-router-service", spec.ServiceName);
             Assert.AreEqual("log-tracing", spec.TracingType);
             Assert.AreEqual(true, spec.TracingEnable);
             Assert.AreEqual(0.5, spec.SampleRate);
@@ -63,10 +63,10 @@ namespace easeagent.UTest
             Assert.AreEqual("----------- cert -----------\ncert content\n----------- cert end -----------\n", spec.TlsCert);
 
             spec = Spec.Load(getBasePath("agent_test_empty_tls.yml"));
-            Assert.AreEqual("demo.demo.sdk-php-router-service", spec.ServiceName);
+            Assert.AreEqual("demo.demo.sdk-net-router-service", spec.ServiceName);
 
             spec = Spec.Load(getBasePath("agent_test_just_service_name.yml"));
-            Assert.AreEqual("demo.demo.sdk-php-router-service", spec.ServiceName);
+            Assert.AreEqual("demo.demo.sdk-net-router-service", spec.ServiceName);
             Assert.AreEqual("log-tracing", spec.TracingType);
             Assert.AreEqual(true, spec.TracingEnable);
             Assert.AreEqual(1.0, spec.SampleRate);

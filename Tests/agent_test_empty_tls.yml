@@ -1,4 +1,4 @@
-serviceName: demo.demo.sdk-php-router-service
+serviceName: demo.demo.sdk-net-router-service
 tracing.type: log-tracing
 tracing.enable: true
 tracing.sample.rate: 0.5

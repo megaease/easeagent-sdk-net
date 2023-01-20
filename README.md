@@ -78,7 +78,7 @@ Obs. for a more complete [frontend/backend](./Examples/aspnetcore/) example.
 
 ## Community
 
-* [Github Issues](https://github.com/megaease/easeagent-sdk-php/issues)
+* [Github Issues](https://github.com/megaease/easeagent-sdk-net/issues)
 * [Join Slack Workspace](https://join.slack.com/t/openmegaease/shared_invite/zt-upo7v306-lYPHvVwKnvwlqR0Zl2vveA) for requirement, issue and development.
 * [MegaEase on Twitter](https://twitter.com/megaease)
 

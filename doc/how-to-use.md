@@ -11,7 +11,7 @@ $ dotnet add package easeagent --version 0.0.1
 
 ## Usage
 ### First: Configuration
-create a yaml file config for your server like this: [agent.yml](./agent.yml)
+create a yaml file config for your server like this: [agent.yml](https://github.com/megaease/easeagent-sdk-net/blob/main/doc/agent.yml)
 
 If you are using `MegaEase Cloud`. Please download the agent.yml on the front end. `YOUR_SERVCIE_NAME`,`TYPE_OF_TRACING`,`MEGAEASE_CLOUD_URL` and `TLS` will be filled in for you automatically.
 
@@ -73,7 +73,7 @@ trace.Record(Annotations.ServerSend());
 trace.Record(Annotations.Tag("http.url", "<url>")); //adds binary annotation
 ```
 
-We provide an interface so that you can decorate the Span of the middleware, please refer to another [document](./megaease-cloud-config.md) for the reason of decoration.
+We provide an interface so that you can decorate the Span of the middleware, please refer to another [document](https://github.com/megaease/easeagent-sdk-net/blob/main/doc/megaease-cloud-config.md) for the reason of decoration.
 ```csharp
 // decorate a span to rabbitmq
 Agent.RecordMiddleware(trace, easeagent.Middleware.Type.RabbitMQ);
