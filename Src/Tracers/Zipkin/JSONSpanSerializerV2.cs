@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System;
@@ -190,7 +190,7 @@ namespace easeagent.Tracers.Zipkin
             }
             if (serviceName != null)
             {
-                writer.WriteField(JSONSpanSerializerV2.serviceName, zipkin4net.Tracers.Zipkin.SerializerUtils.ToEscaped(serviceName));
+                writer.WriteField(JSONSpanSerializerV2.serviceName, zipkin4net.Tracers.Zipkin.SerializerUtils.ToEscaped(serviceName.ToLower()));
             }
             writer.Write(closingBrace);
         }
