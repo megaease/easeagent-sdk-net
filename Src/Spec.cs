@@ -40,7 +40,7 @@ namespace easeagent
         {
             return new Spec
             {
-                ServiceName = "zone.damoin.service",
+                ServiceName = "zone.domain.service",
                 TracingType = "log-tracing",
                 TracingEnable = true,
                 SampleRate = 1.0F,
