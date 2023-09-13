@@ -50,13 +50,13 @@ namespace easeagent.Transport.Http
                 {
                     ClientCertificateOptions = ClientCertificateOption.Manual,
                     SslProtocols = SslProtocols.Tls12,
-                    ClientCertificates = { buildX509Certificate2(spec.TlsKey, spec.TlsCert) }
+                    ClientCertificates = { BuildX509Certificate2(spec.TlsKey, spec.TlsCert) }
                 });
             }
             return new HttpSender(client, spec.OutputServerUrl);
         }
 
-        private static X509Certificate2 buildX509Certificate2(string key, string cert)
+        private static X509Certificate2 BuildX509Certificate2(string key, string cert)
         {
             using (X509Certificate2 pubOnly = new X509Certificate2(System.Text.Encoding.ASCII.GetBytes(cert)))
             using (RSA rsa = RSA.Create())
