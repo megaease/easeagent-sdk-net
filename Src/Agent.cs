@@ -59,7 +59,7 @@ namespace easeagent
             }
             TraceManager.Trace128Bits = spec.Id128bit;
             IZipkinSender sender = default(IZipkinSender);
-            if (spec.OutputServerUrl == null || spec.OutputServerUrl.Trim().Equals(""))
+            if (string.IsNullOrWhiteSpace(spec.OutputServerUrl))
             {
                 LoggerManager.GetTracingLogger().LogInformation("out put server was empty, use console reporter for trace.");
                 sender = new ConsoleSender();

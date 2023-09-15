@@ -83,34 +83,34 @@ namespace easeagent
                 switch (kvp.Key)
                 {
                     case "serviceName":
-                        spec.ServiceName = (string)(isEmpty(kvp.Value) ? "" : kvp.Value);
+                        spec.ServiceName = string.IsNullOrWhiteSpace(kvp.Value) ? string.Empty : kvp.Value;
                         break;
                     case "tracing.type":
-                        spec.TracingType = (string)(isEmpty(kvp.Value) ? "" : kvp.Value);
+                        spec.TracingType = string.IsNullOrWhiteSpace(kvp.Value) ? string.Empty : kvp.Value;
                         break;
                     case "tracing.enable":
-                        spec.TracingEnable = isEmpty(kvp.Value) ? true : bool.Parse(kvp.Value);
+                        spec.TracingEnable = string.IsNullOrWhiteSpace(kvp.Value) ? true : bool.Parse(kvp.Value);
                         break;
                     case "tracing.sample.rate":
-                        spec.SampleRate = isEmpty(kvp.Value) ? 1.0F : float.Parse(kvp.Value);
+                        spec.SampleRate = string.IsNullOrWhiteSpace(kvp.Value) ? 1.0F : float.Parse(kvp.Value);
                         break;
                     case "tracing.shared.spans":
-                        spec.SharedSpans = isEmpty(kvp.Value) ? true : bool.Parse(kvp.Value);
+                        spec.SharedSpans = string.IsNullOrWhiteSpace(kvp.Value) ? true : bool.Parse(kvp.Value);
                         break;
                     case "tracing.id128bit":
-                        spec.Id128bit = isEmpty(kvp.Value) ? false : bool.Parse(kvp.Value);
+                        spec.Id128bit = string.IsNullOrWhiteSpace(kvp.Value) ? false : bool.Parse(kvp.Value);
                         break;
                     case "reporter.output.server":
-                        spec.OutputServerUrl = isEmpty(kvp.Value) ? "" : kvp.Value;
+                        spec.OutputServerUrl = string.IsNullOrWhiteSpace(kvp.Value) ? string.Empty : kvp.Value;
                         break;
                     case "reporter.output.server.tls.enable":
-                        spec.EnableTls = isEmpty(kvp.Value) ? false : bool.Parse(kvp.Value);
+                        spec.EnableTls = string.IsNullOrWhiteSpace(kvp.Value) ? false : bool.Parse(kvp.Value);
                         break;
                     case "reporter.output.server.tls.key":
-                        spec.TlsKey = isEmpty(kvp.Value) ? "" : kvp.Value;
+                        spec.TlsKey = string.IsNullOrWhiteSpace(kvp.Value) ? string.Empty : kvp.Value;
                         break;
                     case "reporter.output.server.tls.cert":
-                        spec.TlsCert = isEmpty(kvp.Value) ? "" : kvp.Value;
+                        spec.TlsCert = string.IsNullOrWhiteSpace(kvp.Value) ? string.Empty : kvp.Value;
                         break;
                     default:
                         break;
@@ -119,14 +119,9 @@ namespace easeagent
             return spec;
         }
 
-        public static bool isEmpty(string v)
-        {
-            return v == null || v.Length == 0 || v.Trim().Length == 0;
-        }
-
         public void Validate()
         {
-            if (EnableTls && (isEmpty(TlsKey) || isEmpty(TlsCert)))
+            if (EnableTls && (string.IsNullOrWhiteSpace(TlsKey) || string.IsNullOrWhiteSpace(TlsCert)))
             {
                 throw new FormatException("key, cert are not all specified");
             }
