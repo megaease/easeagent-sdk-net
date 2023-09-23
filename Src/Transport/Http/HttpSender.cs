@@ -1,12 +1,12 @@
 /**
  * Copyright 2023 MegaEase
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,6 @@ namespace easeagent.Transport.Http
         private string _collectorUrl;
         private HttpClient _httpClient;
 
-
         public HttpSender(HttpClient httpClient, string collectorUrl)
         {
             _httpClient = httpClient;
@@ -46,12 +45,14 @@ namespace easeagent.Transport.Http
             }
             else
             {
-                client = new HttpClient(new HttpClientHandler
-                {
-                    ClientCertificateOptions = ClientCertificateOption.Manual,
-                    SslProtocols = SslProtocols.Tls12,
-                    ClientCertificates = { BuildX509Certificate2(spec.TlsKey, spec.TlsCert) }
-                });
+                client = new HttpClient(
+                    new HttpClientHandler
+                    {
+                        ClientCertificateOptions = ClientCertificateOption.Manual,
+                        SslProtocols = SslProtocols.Tls12,
+                        ClientCertificates = { BuildX509Certificate2(spec.TlsKey, spec.TlsCert) }
+                    }
+                );
             }
             return new HttpSender(client, spec.OutputServerUrl);
         }
@@ -82,15 +83,22 @@ namespace easeagent.Transport.Http
             content.Headers.Add("b3", "0");
             try
             {
-                HttpResponseMessage result = _httpClient.PostAsync(_collectorUrl, content).GetAwaiter().GetResult();
+                HttpResponseMessage result = _httpClient
+                    .PostAsync(_collectorUrl, content)
+                    .GetAwaiter()
+                    .GetResult();
                 if (!result.IsSuccessStatusCode)
                 {
-                    LoggerManager.GetTracingLogger().LogWarning("send data to collector fail: " + result.ToString());
+                    LoggerManager
+                        .GetTracingLogger()
+                        .LogWarning("send data to collector fail: " + result.ToString());
                 }
             }
             catch (Exception e)
             {
-                LoggerManager.GetTracingLogger().LogError($"send data to {_collectorUrl} faild: {e.ToString()}");
+                LoggerManager
+                    .GetTracingLogger()
+                    .LogError($"send data to {_collectorUrl} failed: {e}");
             }
         }
     }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2023 MegaEase
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,7 +50,6 @@ namespace easeagent.Tracers.Zipkin
         public string ServiceName { get; }
         public string TracingType { get; }
 
-
         public JSONSpanSerializerV2(string ServiceName, string TracingType)
         {
             this.ServiceName = ServiceName;
@@ -82,14 +81,12 @@ namespace easeagent.Tracers.Zipkin
             writer.Write(comma);
             writer.WriteField(timestamp, span.Timestamp);
 
-
             //parentId
             if (span.ParentId != null)
             {
                 writer.Write(comma);
                 writer.WriteField(parentId, span.ParentId);
             }
-
 
             //name
             writer.Write(comma);
@@ -110,7 +107,6 @@ namespace easeagent.Tracers.Zipkin
             {
                 writer.Write(comma);
                 writer.WriteField(debug, span.Debug.Value);
-
             }
 
             //shared
@@ -127,17 +123,17 @@ namespace easeagent.Tracers.Zipkin
             var remoteEndpoint = getRemoteEndpoint(span);
             if (remoteEndpoint != null)
             {
-                SerializeRemoteEndPoint(writer, remoteEndpoint.HostPort, remoteEndpoint.ServiceName);
+                SerializeRemoteEndPoint(
+                    writer,
+                    remoteEndpoint.HostPort,
+                    remoteEndpoint.ServiceName
+                );
             }
 
             if (span.Annotations != null && span.Annotations.Count != 0)
             {
                 writer.Write(comma);
-                writer.WriteList(
-                    SerializeAnnotation,
-                    annotations,
-                    span.Annotations
-                );
+                writer.WriteList(SerializeAnnotation, annotations, span.Annotations);
             }
             if (span.Tags != null && span.Tags.Count != 0)
             {
@@ -152,35 +148,53 @@ namespace easeagent.Tracers.Zipkin
             writer.Write(closingBrace);
         }
 
-
         private static void SerializeAnnotation(StreamWriter writer, Annotation annotation)
         {
             writer.Write(openingBrace);
             writer.WriteField(timestamp, annotation.Timestamp);
             writer.Write(comma);
-            writer.WriteField(value, zipkin4net.Tracers.Zipkin.SerializerUtils.ToEscaped(annotation.Value));
+            writer.WriteField(
+                value,
+                zipkin4net.Tracers.Zipkin.SerializerUtils.ToEscaped(annotation.Value)
+            );
             writer.Write(closingBrace);
         }
 
-        private static void SerializeLocalEndPoint(StreamWriter writer, IPEndPoint endPoint, string serviceName)
+        private static void SerializeLocalEndPoint(
+            StreamWriter writer,
+            IPEndPoint endPoint,
+            string serviceName
+        )
         {
             writer.Write(comma);
             writer.WriteAnchor(localEndpoint);
             SerializeEndPoint(writer, endPoint, serviceName);
         }
-        private static void SerializeRemoteEndPoint(StreamWriter writer, IPEndPoint endPoint, string serviceName)
+
+        private static void SerializeRemoteEndPoint(
+            StreamWriter writer,
+            IPEndPoint endPoint,
+            string serviceName
+        )
         {
             writer.Write(comma);
             writer.WriteAnchor(remoteEndpoint);
             SerializeEndPoint(writer, endPoint, serviceName);
         }
 
-        private static void SerializeEndPoint(StreamWriter writer, IPEndPoint endPoint, string serviceName)
+        private static void SerializeEndPoint(
+            StreamWriter writer,
+            IPEndPoint endPoint,
+            string serviceName
+        )
         {
             writer.Write(openingBrace);
             if (endPoint != null)
             {
-                writer.WriteField(ipv4, zipkin4net.Tracers.Zipkin.SerializerUtils.IpToString(endPoint.Address));
+                writer.WriteField(
+                    ipv4,
+                    zipkin4net.Tracers.Zipkin.SerializerUtils.IpToString(endPoint.Address)
+                );
                 writer.Write(comma);
                 writer.WriteField(port, (short)endPoint.Port);
                 if (serviceName != null)
@@ -190,7 +204,10 @@ namespace easeagent.Tracers.Zipkin
             }
             if (serviceName != null)
             {
-                writer.WriteField(JSONSpanSerializerV2.serviceName, zipkin4net.Tracers.Zipkin.SerializerUtils.ToEscaped(serviceName.ToLower()));
+                writer.WriteField(
+                    JSONSpanSerializerV2.serviceName,
+                    zipkin4net.Tracers.Zipkin.SerializerUtils.ToEscaped(serviceName.ToLower())
+                );
             }
             writer.Write(closingBrace);
         }
@@ -202,7 +219,9 @@ namespace easeagent.Tracers.Zipkin
 
         private static String getServiceNameOrDefault(Span span)
         {
-            return span.LocalServiceName != null ? span.LocalServiceName : zipkin4net.Tracers.Zipkin.SerializerUtils.DefaultServiceName;
+            return span.LocalServiceName != null
+                ? span.LocalServiceName
+                : zipkin4net.Tracers.Zipkin.SerializerUtils.DefaultServiceName;
         }
 
         private Endpoint getRemoteEndpoint(Span span)
@@ -226,7 +245,6 @@ namespace easeagent.Tracers.Zipkin
         }
     }
 
-
     delegate void SerializeMethod<T>(StreamWriter writer, T element);
 
     internal static class WriterExtensions
@@ -235,8 +253,8 @@ namespace easeagent.Tracers.Zipkin
         private const char colon = ':';
         internal const char openingBracket = '[';
         internal const char closingBracket = ']';
-        internal static void WriteList<U>
-        (
+
+        internal static void WriteList<U>(
             this StreamWriter writer,
             SerializeMethod<U> serializer,
             string fieldName,
@@ -247,8 +265,7 @@ namespace easeagent.Tracers.Zipkin
             WriteList(writer, serializer, elements);
         }
 
-        internal static void WriteList<U>
-        (
+        internal static void WriteList<U>(
             this StreamWriter writer,
             SerializeMethod<U> serializer,
             ICollection<U> elements
@@ -259,8 +276,7 @@ namespace easeagent.Tracers.Zipkin
             writer.Write(closingBracket);
         }
 
-        private static void WriteU<U>
-        (
+        private static void WriteU<U>(
             this StreamWriter writer,
             SerializeMethod<U> serializer,
             ICollection<U> elements
@@ -281,8 +297,7 @@ namespace easeagent.Tracers.Zipkin
             }
         }
 
-        internal static void WriteMap<U>
-        (
+        internal static void WriteMap<U>(
             this StreamWriter writer,
             SerializeMethod<U> serializer,
             string fieldName,
@@ -293,8 +308,7 @@ namespace easeagent.Tracers.Zipkin
             WriteMap(writer, serializer, elements);
         }
 
-        internal static void WriteMap<U>
-        (
+        internal static void WriteMap<U>(
             this StreamWriter writer,
             SerializeMethod<U> serializer,
             ICollection<U> elements
@@ -305,19 +319,13 @@ namespace easeagent.Tracers.Zipkin
             writer.Write(JSONSpanSerializerV2.closingBrace);
         }
 
-        internal static void WriteField
-        (
-            this StreamWriter writer,
-            string fieldName,
-            bool fieldValue
-        )
+        internal static void WriteField(this StreamWriter writer, string fieldName, bool fieldValue)
         {
             WriteAnchor(writer, fieldName);
             writer.Write(fieldValue ? "true" : "false");
         }
 
-        internal static void WriteField
-        (
+        internal static void WriteField(
             this StreamWriter writer,
             string fieldName,
             string fieldValue
@@ -328,12 +336,8 @@ namespace easeagent.Tracers.Zipkin
             writer.Write(fieldValue);
             writer.Write(quotes);
         }
-        internal static void WriteField
-        (
-            this StreamWriter writer,
-            string fieldName,
-            long fieldValue
-        )
+
+        internal static void WriteField(this StreamWriter writer, string fieldName, long fieldValue)
         {
             WriteAnchor(writer, fieldName);
             writer.Write(fieldValue);

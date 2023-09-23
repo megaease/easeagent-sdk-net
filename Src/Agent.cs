@@ -1,12 +1,12 @@
 /**
  * Copyright 2023 MegaEase
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,17 +32,21 @@ namespace easeagent
     public class Agent
     {
         private static Spec spec = Spec.NewOne();
-        private static zipkin4net.Propagation.IInjector<Dictionary<string, string>> injector = Propagations.B3String.Injector<Dictionary<string, string>>((carrier, key, value) =>
-        {
-            carrier.Add(key, value);
-        });
+        private static IInjector<Dictionary<string, string>> injector =
+            Propagations.B3String.Injector<Dictionary<string, string>>(
+                (carrier, key, value) =>
+                {
+                    carrier.Add(key, value);
+                }
+            );
 
-        private static zipkin4net.Propagation.IExtractor<HeaderGetter> extractor = Propagations.B3String.Extractor<HeaderGetter>((carrier, key) =>
-        {
-            return carrier(key);
-
-        });
-
+        private static IExtractor<HeaderGetter> extractor =
+            Propagations.B3String.Extractor<HeaderGetter>(
+                (carrier, key) =>
+                {
+                    return carrier(key);
+                }
+            );
 
         //Environment.GetEnvironmentVariable("EASEAGENT_CONFIG")
         public static void RegisterFromYaml(String yamlFile)
@@ -58,10 +62,12 @@ namespace easeagent
                 TraceManager.SamplingRate = 0;
             }
             TraceManager.Trace128Bits = spec.Id128bit;
-            IZipkinSender sender = default(IZipkinSender);
+            IZipkinSender sender;
             if (string.IsNullOrWhiteSpace(spec.OutputServerUrl))
             {
-                LoggerManager.GetTracingLogger().LogInformation("out put server was empty, use console reporter for trace.");
+                LoggerManager
+                    .GetTracingLogger()
+                    .LogInformation("out put server was empty, use console reporter for trace.");
                 sender = new ConsoleSender();
             }
             else
@@ -72,9 +78,13 @@ namespace easeagent
                 }
                 catch (Exception e)
                 {
-                    LoggerManager.GetTracingLogger().LogError("build http sender fail, use console reporter for trace: " + e.ToString());
+                    LoggerManager
+                        .GetTracingLogger()
+                        .LogError(
+                            "build http sender fail, use console reporter for trace: "
+                                + e.ToString()
+                        );
                     sender = new ConsoleSender();
-
                 }
             }
             var serializer = new JSONSpanSerializerV2(spec.ServiceName, spec.TracingType);
