@@ -23,6 +23,7 @@ using zipkin4net;
 using zipkin4net.Propagation;
 using zipkin4net.Tracers.Zipkin;
 using easeagent.Middleware;
+using easeagent.Transport;
 
 namespace easeagent
 {
