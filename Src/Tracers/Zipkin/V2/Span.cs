@@ -1,12 +1,12 @@
 /**
  * Copyright 2023 MegaEase
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,14 +22,14 @@ namespace easeagent.Tracers.Zipkin.V2
 {
     /// <summary>
     /// A trace is a series of spans (often RPC calls) which form a latency tree.
-    /// 
+    ///
     /// <p>Spans are usually created by instrumentation in RPC clients or servers, but can also represent
     /// in-process activity. Annotations in spans are similar to log statements, and are sometimes
     /// created directly by application developers to indicate events of interest, such as a cache miss.
-    /// 
+    ///
     /// <p>The root span is where <see cref="ParentId"/> is null; it usually has the longest <see cref="Duration"/>
     /// in the trace.
-    /// 
+    ///
     /// <p>Span identifiers are packed into longs, but should be treated opaquely. ID encoding is 16 or
     /// 32 character lower-hex, to avoid signed interpretation.
     /// </summary>
@@ -65,16 +65,16 @@ namespace easeagent.Tracers.Zipkin.V2
 
         /// <summary>
         /// The parent's <see cref="Id"/> or null if this the root span in a trace.
-        /// 
+        ///
         /// <p>This is the same encoding as <see cref="Id"/>. For example <code>ffdc9bb9a6453df3</code>
         /// </summary>
         public readonly string ParentId;
 
         /// <summary>
         /// Unique 64bit identifier for this operation within the trace.
-        /// 
+        ///
         /// <p>Encoded as 16 lowercase hex characters. For example <code>ffdc9bb9a6453df3</code>
-        /// 
+        ///
         /// <p>A span is uniquely identified in storage by (<see cref="TraceId"/>, <see cref="Span.Id"/>).
         /// </summary>
         public readonly string Id;
@@ -115,7 +115,7 @@ namespace easeagent.Tracers.Zipkin.V2
 
         /// <summary>
         /// Span name in lowercase, rpc method for example.
-        /// 
+        ///
         /// <p>Conventionally, when the span name isn't known, name = "unknown".
         /// </summary>
         public readonly string Name;
@@ -142,17 +142,17 @@ namespace easeagent.Tracers.Zipkin.V2
         /// <summary>
         /// Measurement in microseconds of the critical path, if known. Durations of less than one
         /// microsecond must be rounded up to 1 microsecond.
-        /// 
+        ///
         /// <p>This value should be set directly, as opposed to implicitly via annotation timestamps. Doing
         /// so encourages precision decoupled from problems of clocks, such as skew or NTP updates causing
         /// time to move backwards.
-        /// 
+        ///
         /// <p>If this field is persisted as unset, zipkin will continue to work, except duration query
         /// support will be implementation-specific. Similarly, setting this field non-atomically is
         /// implementation-specific.
-        /// 
+        ///
         /// <p>This field is i64 vs i32 to support spans longer than 35 minutes.
-        /// 
+        ///
         /// </summary>
         public readonly long Duration;
 
@@ -182,7 +182,7 @@ namespace easeagent.Tracers.Zipkin.V2
 
         /// <summary>
         /// Tags a span with context, usually to support query or aggregation.
-        /// 
+        ///
         /// <p>For example, a tag key could be <code>"http.path"</code>.
         /// </summary>
         public readonly IDictionary<string, string> Tags;
@@ -195,7 +195,7 @@ namespace easeagent.Tracers.Zipkin.V2
         /// <summary>
         /// True if we are contributing to a span started by another tracer (ex on a different host).
         /// Defaults to null. When set, it is expected for <see cref="Kind"/> to be <see cref="SpanKind.SERVER"/>.
-        /// 
+        ///
         /// <p>When an RPC trace is client-originated, it will be sampled and the same span ID is used for
         /// the server side. However, the server shouldn't set span.timestamp or duration since it didn't
         /// start the span.
@@ -223,21 +223,28 @@ namespace easeagent.Tracers.Zipkin.V2
             Duration = builder.duration;
             LocalEndpoint = builder.localEndpoint;
             RemoteEndpoint = builder.remoteEndpoint;
-            Annotations = builder.annotations == null ? null : new List<Annotation>(builder.annotations);
+            Annotations =
+                builder.annotations == null ? null : new List<Annotation>(builder.annotations);
             Tags = builder.tags == null ? null : new Dictionary<string, string>(builder.tags);
             Debug = HasFlag(flags, FLAG_DEBUG_SET) ? HasFlag(flags, FLAG_DEBUG) : (bool?)null;
             Shared = HasFlag(flags, FLAG_SHARED_SET) ? HasFlag(flags, FLAG_SHARED) : (bool?)null;
-            LocalServiceName = builder.localEndpoint == null ? null : builder.localEndpoint.ServiceName;
-            RemoteServiceName = builder.remoteEndpoint == null ? null : builder.remoteEndpoint.ServiceName;
+            LocalServiceName =
+                builder.localEndpoint == null ? null : builder.localEndpoint.ServiceName;
+            RemoteServiceName =
+                builder.remoteEndpoint == null ? null : builder.remoteEndpoint.ServiceName;
         }
 
         public class Builder
         {
-            internal string traceId, parentId, id;
+            internal string traceId,
+                parentId,
+                id;
             internal SpanKind? kind;
             internal string name;
-            internal long timestamp, duration; // zero means null
-            internal Endpoint localEndpoint, remoteEndpoint;
+            internal long timestamp,
+                duration; // zero means null
+            internal Endpoint localEndpoint,
+                remoteEndpoint;
             internal IList<Annotation> annotations;
             internal IDictionary<string, string> tags;
             internal int flags = 0; // bit field for timestamp and duration
@@ -313,7 +320,8 @@ namespace easeagent.Tracers.Zipkin.V2
                 }
 
                 var length = parentId.Length;
-                if (length > 16) throw new ArgumentException($"{nameof(parentId)}.length > 16");
+                if (length > 16)
+                    throw new ArgumentException($"{nameof(parentId)}.length > 16");
                 ValidateHex(parentId);
                 this.parentId = length < 16 ? PadLeft(parentId, 16) : parentId;
                 return this;
@@ -321,9 +329,11 @@ namespace easeagent.Tracers.Zipkin.V2
 
             public Builder Id(string id)
             {
-                if (id == null) throw new ArgumentNullException($"{nameof(id)} == null");
+                if (id == null)
+                    throw new ArgumentNullException($"{nameof(id)} == null");
                 var length = id.Length;
-                if (length > 16) throw new ArgumentException($"{nameof(id)}.length > 16");
+                if (length > 16)
+                    throw new ArgumentException($"{nameof(id)}.length > 16");
                 ValidateHex(id);
                 this.id = length < 16 ? PadLeft(id, 16) : id;
                 return this;
@@ -343,7 +353,8 @@ namespace easeagent.Tracers.Zipkin.V2
 
             public Builder Timestamp(long timestamp)
             {
-                if (timestamp < 0L) timestamp = 0L;
+                if (timestamp < 0L)
+                    timestamp = 0L;
                 this.timestamp = timestamp;
                 return this;
             }
@@ -355,7 +366,8 @@ namespace easeagent.Tracers.Zipkin.V2
 
             public Builder Duration(long duration)
             {
-                if (duration < 0L) duration = 0L;
+                if (duration < 0L)
+                    duration = 0L;
                 this.duration = duration;
                 return this;
             }
@@ -379,16 +391,20 @@ namespace easeagent.Tracers.Zipkin.V2
 
             public Builder AddAnnotation(long timestamp, string value)
             {
-                if (annotations == null) annotations = new List<Annotation>();
+                if (annotations == null)
+                    annotations = new List<Annotation>();
                 annotations.Add(new Annotation(timestamp, value));
                 return this;
             }
 
             public Builder PutTag(string key, string value)
             {
-                if (tags == null) tags = new Dictionary<string, string>();
-                if (key == null) throw new ArgumentNullException($"{nameof(key)} == null");
-                if (value == null) throw new ArgumentNullException($"{nameof(value)} of " + key + " == null");
+                if (tags == null)
+                    tags = new Dictionary<string, string>();
+                if (key == null)
+                    throw new ArgumentNullException($"{nameof(key)} == null");
+                if (value == null)
+                    throw new ArgumentNullException($"{nameof(value)} of " + key + " == null");
                 this.tags[key] = value;
                 return this;
             }
@@ -448,22 +464,25 @@ namespace easeagent.Tracers.Zipkin.V2
             public Span Build()
             {
                 var missing = "";
-                if (traceId == null) missing += $" {nameof(traceId)}";
-                if (id == null) missing += $" {nameof(id)}";
-                if (!"".Equals(missing)) throw new InvalidOperationException("Missing :" + missing);
+                if (traceId == null)
+                    missing += $" {nameof(traceId)}";
+                if (id == null)
+                    missing += $" {nameof(id)}";
+                if (!"".Equals(missing))
+                    throw new InvalidOperationException("Missing :" + missing);
                 return new Span(this);
             }
 
-            internal Builder()
-            {
-            }
+            internal Builder() { }
         }
 
         private static string NormalizeTraceId(string traceId)
         {
-            if (traceId == null) throw new ArgumentNullException($"{nameof(traceId)} == null");
+            if (traceId == null)
+                throw new ArgumentNullException($"{nameof(traceId)} == null");
             var length = traceId.Length;
-            if (length > 32) throw new ArgumentException($"{nameof(traceId)}.length > 32");
+            if (length > 32)
+                throw new ArgumentException($"{nameof(traceId)}.length > 32");
             ValidateHex(traceId);
             if (length == 32 || length == 16)
             {

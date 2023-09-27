@@ -1,12 +1,12 @@
 /**
  * Copyright 2023 MegaEase
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,13 +31,19 @@ namespace easeagent.Tracers.Zipkin.V2
     {
         private Span.Builder first = Span.NewBuilder();
         private List<Span.Builder> spans = new List<Span.Builder>();
-        private ZipkinAnnotation cs, sr, ss, cr, ms, mr, ws, wr;
+        private ZipkinAnnotation cs,
+            sr,
+            ss,
+            cr,
+            ms,
+            mr,
+            ws,
+            wr;
 
         public static V1SpanConverter Create()
         {
             return new V1SpanConverter();
         }
-
 
         public List<Span> Convert(zipkin4net.Tracers.Zipkin.Span source)
         {
@@ -55,7 +61,6 @@ namespace easeagent.Tracers.Zipkin.V2
             ProcessBinaryAnnotations(source);
             Finish(sink);
         }
-
 
         private void ProcessAnnotations(zipkin4net.Tracers.Zipkin.Span source)
         {
@@ -88,8 +93,10 @@ namespace easeagent.Tracers.Zipkin.V2
 
                 // the server side is smaller than that, we have to read annotations to find out
                 server.Shared(true).Timestamp(ToMicroseconds(sr.Timestamp));
-                if (ss != null) server.Duration(ToMicroseconds(ss.Timestamp) - ToMicroseconds(sr.Timestamp));
-                if (cr == null && !source.Duration.HasValue) client.Duration(0); // one-way has no duration
+                if (ss != null)
+                    server.Duration(ToMicroseconds(ss.Timestamp) - ToMicroseconds(sr.Timestamp));
+                if (cr == null && !source.Duration.HasValue)
+                    client.Duration(0); // one-way has no duration
             }
             else if (cs != null && cr != null)
             {
@@ -106,12 +113,16 @@ namespace easeagent.Tracers.Zipkin.V2
 
             // Span v1 format did not have a shared flag. By convention, span.timestamp being absent
             // implied shared. When we only see the server-side, carry this signal over.
-            if (cs == null && sr != null &&
-              // We use a signal of either the authoritative timestamp being unset, or the duration is unset
-              // eventhough we have the server send result. The latter clarifies an edge case in MySQL
-              // where a span row is shared between client and server. The presence of timestamp in this
-              // case could be due to the client-side of that RPC.
-              (!source.SpanStarted.HasValue || (ss != null && !source.Duration.HasValue)))
+            if (
+                cs == null
+                && sr != null
+                &&
+                // We use a signal of either the authoritative timestamp being unset, or the duration is unset
+                // eventhough we have the server send result. The latter clarifies an edge case in MySQL
+                // where a span row is shared between client and server. The presence of timestamp in this
+                // case could be due to the client-side of that RPC.
+                (!source.SpanStarted.HasValue || (ss != null && !source.Duration.HasValue))
+            )
             {
                 foreach (Span.Builder span in spans)
                 {
@@ -131,14 +142,20 @@ namespace easeagent.Tracers.Zipkin.V2
                 consumer.Shared(true);
                 if (wr != null)
                 {
-                    consumer.Timestamp(ToMicroseconds(wr.Timestamp)).Duration(ToMicroseconds(mr.Timestamp) - ToMicroseconds(wr.Timestamp));
+                    consumer
+                        .Timestamp(ToMicroseconds(wr.Timestamp))
+                        .Duration(ToMicroseconds(mr.Timestamp) - ToMicroseconds(wr.Timestamp));
                 }
                 else
                 {
                     consumer.Timestamp(ToMicroseconds(mr.Timestamp));
                 }
 
-                producer.Timestamp(ToMicroseconds(ms.Timestamp)).Duration(ws != null ? ToMicroseconds(ws.Timestamp) - ToMicroseconds(ms.Timestamp) : 0);
+                producer
+                    .Timestamp(ToMicroseconds(ms.Timestamp))
+                    .Duration(
+                        ws != null ? ToMicroseconds(ws.Timestamp) - ToMicroseconds(ms.Timestamp) : 0
+                    );
             }
             else if (ms != null)
             {
@@ -157,8 +174,10 @@ namespace easeagent.Tracers.Zipkin.V2
             }
             else
             {
-                if (ws != null) ForAnnotation(source, ws).AddAnnotation(ToMicroseconds(ws.Timestamp), ws.Value);
-                if (wr != null) ForAnnotation(source, wr).AddAnnotation(ToMicroseconds(wr.Timestamp), wr.Value);
+                if (ws != null)
+                    ForAnnotation(source, ws).AddAnnotation(ToMicroseconds(ws.Timestamp), ws.Value);
+                if (wr != null)
+                    ForAnnotation(source, wr).AddAnnotation(ToMicroseconds(wr.Timestamp), wr.Value);
             }
         }
 
@@ -171,7 +190,9 @@ namespace easeagent.Tracers.Zipkin.V2
             }
             if (source.SpanStarted.HasValue)
             {
-                first.Timestamp(ToMicroseconds(source.SpanStarted.Value)).Duration(ToMicroseconds(source.Duration.Value));
+                first
+                    .Timestamp(ToMicroseconds(source.SpanStarted.Value))
+                    .Duration(ToMicroseconds(source.Duration.Value));
             }
         }
 
@@ -179,38 +200,46 @@ namespace easeagent.Tracers.Zipkin.V2
         {
             if (Span.SpanKind.CLIENT.Equals(next.Kind()))
             {
-                if (cs != null) next.Timestamp(ToMicroseconds(cs.Timestamp));
-                if (cr != null) next.AddAnnotation(ToMicroseconds(cr.Timestamp), cr.Value);
+                if (cs != null)
+                    next.Timestamp(ToMicroseconds(cs.Timestamp));
+                if (cr != null)
+                    next.AddAnnotation(ToMicroseconds(cr.Timestamp), cr.Value);
             }
             else if (Span.SpanKind.SERVER.Equals(next.Kind()))
             {
-                if (sr != null) next.Timestamp(ToMicroseconds(sr.Timestamp));
-                if (ss != null) next.AddAnnotation(ToMicroseconds(ss.Timestamp), ss.Value);
+                if (sr != null)
+                    next.Timestamp(ToMicroseconds(sr.Timestamp));
+                if (ss != null)
+                    next.AddAnnotation(ToMicroseconds(ss.Timestamp), ss.Value);
             }
         }
-
 
         private Span.Builder NewSpanBuilder(zipkin4net.Tracers.Zipkin.Span source)
         {
             Span.Builder result = NewBuilder(Span.NewBuilder(), source);
             spans.Add(result);
             return result;
-
         }
 
-        private void MaybeTimestampDuration(zipkin4net.Tracers.Zipkin.Span source, ZipkinAnnotation begin, ZipkinAnnotation end)
+        private void MaybeTimestampDuration(
+            zipkin4net.Tracers.Zipkin.Span source,
+            ZipkinAnnotation begin,
+            ZipkinAnnotation end
+        )
         {
             Span.Builder span2 = first;
             if (source.SpanStarted.HasValue && source.Duration.HasValue)
             {
-                span2.Timestamp(ToMicroseconds(source.SpanStarted.Value)).Duration(ToMicroseconds(source.Duration.Value));
+                span2
+                    .Timestamp(ToMicroseconds(source.SpanStarted.Value))
+                    .Duration(ToMicroseconds(source.Duration.Value));
             }
             else
             {
                 span2.Timestamp(ToMicroseconds(begin.Timestamp));
-                if (end != null) span2.Duration(ToMicroseconds(end.Timestamp) - ToMicroseconds(begin.Timestamp));
+                if (end != null)
+                    span2.Duration(ToMicroseconds(end.Timestamp) - ToMicroseconds(begin.Timestamp));
             }
-
         }
 
         private void Finish(List<Span> sink)
@@ -224,10 +253,13 @@ namespace easeagent.Tracers.Zipkin.V2
 
         private void ProcessBinaryAnnotations(zipkin4net.Tracers.Zipkin.Span source)
         {
-            Endpoint ca = null, sa = null, ma = null;
+            Endpoint ca = null,
+                sa = null,
+                ma = null;
             foreach (BinaryAnnotation b in source.BinaryAnnotations)
             {
-                Endpoint bEndpoint = b.Host == null ? null : new Endpoint(b.Host.ServiceName, b.Host.IPEndPoint);
+                Endpoint bEndpoint =
+                    b.Host == null ? null : new Endpoint(b.Host.ServiceName, b.Host.IPEndPoint);
                 // Peek to see if this is an address annotation. Strictly speaking, address annotations should
                 // have a value of true (not "true" or "1"). However, there are versions of zipkin-ruby in the
                 // wild that create "1" and misinterpreting confuses the question of what is the local
@@ -251,7 +283,8 @@ namespace easeagent.Tracers.Zipkin.V2
                 Span.Builder currentSpan = ForEndpoint(source, bEndpoint);
 
                 // don't add marker "lc" tags
-                if ("lc".Equals(b.Key) && (b.Value == null || b.Value.Length == 0)) continue;
+                if ("lc".Equals(b.Key) && (b.Value == null || b.Value.Length == 0))
+                    continue;
                 currentSpan.PutTag(b.Key, Encoding.UTF8.GetString(b.Value));
             }
 
@@ -300,23 +333,27 @@ namespace easeagent.Tracers.Zipkin.V2
             }
             if (ma != null)
             { // messaging span
-              // Intentionally process messaging endpoints separately in case someone accidentally shared
-              // a messaging span. This will ensure both sides have the address of the broker.
-                if (ms != null) ForAnnotation(source, ms).RemoteEndpoint(ma);
-                if (mr != null) ForAnnotation(source, mr).RemoteEndpoint(ma);
+                // Intentionally process messaging endpoints separately in case someone accidentally shared
+                // a messaging span. This will ensure both sides have the address of the broker.
+                if (ms != null)
+                    ForAnnotation(source, ms).RemoteEndpoint(ma);
+                if (mr != null)
+                    ForAnnotation(source, mr).RemoteEndpoint(ma);
             }
         }
 
         private Span.Builder ForEndpoint(zipkin4net.Tracers.Zipkin.Span source, Endpoint e)
         {
-            if (e == null) return first; // allocate missing endpoint data to first span
-            if (CloseEnoughEndpoint(first, e)) return first;
+            if (e == null)
+                return first; // allocate missing endpoint data to first span
+            if (CloseEnoughEndpoint(first, e))
+                return first;
             foreach (Span.Builder next in spans)
             {
-                if (CloseEnoughEndpoint(next, e)) return next;
+                if (CloseEnoughEndpoint(next, e))
+                    return next;
             }
             return NewSpanBuilder(source).LocalEndpoint(e);
-
         }
 
         private bool CloseEnoughEndpoint(Span.Builder builder, Endpoint e)
@@ -398,11 +435,14 @@ namespace easeagent.Tracers.Zipkin.V2
                 first.AddAnnotation(ToMicroseconds(a.Timestamp), a.Value);
             }
 
-            if (kind == null || !kind.HasValue) return first; // allocate missing endpoint data to first span
-            if (CloseSpanKind(first, kind.Value)) return first;
+            if (kind == null || !kind.HasValue)
+                return first; // allocate missing endpoint data to first span
+            if (CloseSpanKind(first, kind.Value))
+                return first;
             foreach (Span.Builder next in spans)
             {
-                if (CloseSpanKind(next, kind.Value)) return next;
+                if (CloseSpanKind(next, kind.Value))
+                    return next;
             }
             return NewSpanBuilder(source).Kind(kind.Value);
         }
@@ -422,15 +462,17 @@ namespace easeagent.Tracers.Zipkin.V2
             return new Endpoint(source.ServiceName, source.Endpoint);
         }
 
-
-        private static bool EndTimestampReflectsSpanDuration(ZipkinAnnotation end, zipkin4net.Tracers.Zipkin.Span source)
+        private static bool EndTimestampReflectsSpanDuration(
+            ZipkinAnnotation end,
+            zipkin4net.Tracers.Zipkin.Span source
+        )
         {
             return end != null
                 && source.SpanStarted.HasValue
                 && source.Duration.HasValue
-                && ToMicroseconds(source.SpanStarted.Value) + ToMicroseconds(source.Duration.Value) == ToMicroseconds(end.Timestamp);
+                && ToMicroseconds(source.SpanStarted.Value) + ToMicroseconds(source.Duration.Value)
+                    == ToMicroseconds(end.Timestamp);
         }
-
 
         private static long ToMicroseconds(DateTime dateTime)
         {
@@ -442,18 +484,31 @@ namespace easeagent.Tracers.Zipkin.V2
             return (long)(timeSpan.TotalMilliseconds * 1000);
         }
 
-
-        private static Span.Builder NewBuilder(Span.Builder builder, zipkin4net.Tracers.Zipkin.Span source)
+        private static Span.Builder NewBuilder(
+            Span.Builder builder,
+            zipkin4net.Tracers.Zipkin.Span source
+        )
         {
-            var hexTraceIdHigh = TraceManager.Trace128Bits ? NumberUtils.EncodeLongToLowerHexString(source.SpanState.TraceIdHigh) : "";
-            var traceId = hexTraceIdHigh + NumberUtils.EncodeLongToLowerHexString(source.SpanState.TraceId);
-            builder.TraceId(hexTraceIdHigh + NumberUtils.EncodeLongToLowerHexString(source.SpanState.TraceId));
+            var hexTraceIdHigh = TraceManager.Trace128Bits
+                ? NumberUtils.EncodeLongToLowerHexString(source.SpanState.TraceIdHigh)
+                : "";
+            var traceId =
+                hexTraceIdHigh + NumberUtils.EncodeLongToLowerHexString(source.SpanState.TraceId);
+            builder.TraceId(
+                hexTraceIdHigh + NumberUtils.EncodeLongToLowerHexString(source.SpanState.TraceId)
+            );
             if (!source.IsRoot)
             {
-                builder.ParentId(NumberUtils.EncodeLongToLowerHexString(source.SpanState.ParentSpanId.Value));
+                builder.ParentId(
+                    NumberUtils.EncodeLongToLowerHexString(source.SpanState.ParentSpanId.Value)
+                );
             }
             builder.Id(NumberUtils.EncodeLongToLowerHexString(source.SpanState.SpanId));
-            builder.Name(source.Name != null ? SerializerUtils.ToEscaped(source.Name) : SerializerUtils.DefaultRpcMethodName);
+            builder.Name(
+                source.Name != null
+                    ? SerializerUtils.ToEscaped(source.Name)
+                    : SerializerUtils.DefaultRpcMethodName
+            );
             builder.Debug(false);
             builder.LocalEndpoint(new Endpoint(source.ServiceName, source.Endpoint));
             return builder;
