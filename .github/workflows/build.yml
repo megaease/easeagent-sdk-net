@@ -1,0 +1,46 @@
+name: build sdk
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  linux-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+    
+    - name: Install paket
+      run: dotnet tool install paket --tool-path .paket
+    
+    - name: Build solution
+      run:  bash  ./scripts/ci.sh
+  
+  windows-build:
+    runs-on: windows-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+    
+    - name: Install paket
+      run: dotnet tool install paket --tool-path .paket
+    
+    - name: Build solution
+      run:  |
+        ./scripts/ci.bat
